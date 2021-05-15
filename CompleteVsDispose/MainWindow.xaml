@@ -1,0 +1,52 @@
+﻿<Window x:Class="CompleteVsDispose.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:completing="clr-namespace:CompleteVsDispose.Completing"
+        xmlns:disposing="clr-namespace:CompleteVsDispose.Disposing"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Self}, Path=.}" >
+    <Window.Resources>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ItemsControl Grid.Column="0" ItemsSource="{Binding ParentViewModelCompleting.Children}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type completing:ChildViewModelCompleting}">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}=>{1:N2}">
+                                <Binding Path="Key"/>
+                                <Binding Path="Value"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding ParentViewModelDisposing.Children}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type disposing:ChildViewModelDisposing}">
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0}=>{1:N2}">
+                                <Binding Path="Key"/>
+                                <Binding Path="Value"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Button Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"  Content="Dispose" Command="{Binding DisposeCommand}"/>
+    </Grid>
+</Window>
