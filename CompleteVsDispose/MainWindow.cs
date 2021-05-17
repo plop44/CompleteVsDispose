@@ -1,5 +1,6 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
 
 namespace CompleteVsDispose
 {
@@ -10,18 +11,13 @@ namespace CompleteVsDispose
     {
         public MainWindow()
         {
-            DisposeCommand = new DelegateCommand(OnDisposeCommandExecute);
-            InitializeComponent();            
+            InitializeComponent();
+            Closing += OnClosing;
         }
 
-        private void OnDisposeCommandExecute()
+        private void OnClosing(object sender, CancelEventArgs e)
         {
-            ParentViewModelCompleting?.Dispose();
-            ParentViewModelDisposing?.Dispose();
+            (DataContext as IDisposable)?.Dispose();
         }
-
-        public Completing.ParentViewModelCompleting ParentViewModelCompleting { get; } = new Completing.ParentViewModelCompleting();
-        public Disposing.ParentViewModelDisposing ParentViewModelDisposing { get; } = new Disposing.ParentViewModelDisposing();
-        public ICommand DisposeCommand { get; }
     }
 }

@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:completing="clr-namespace:CompleteVsDispose.Completing"
         xmlns:disposing="clr-namespace:CompleteVsDispose.Disposing"
+        xmlns:completeVsDispose="clr-namespace:CompleteVsDispose"
         mc:Ignorable="d"
-        Title="CompleteVsDispose" Height="450" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Self}, Path=.}">
+        Title="CompleteVsDispose" Height="450" Width="800">
+    <Window.DataContext>
+        <completeVsDispose:MainWindowViewModel />
+    </Window.DataContext>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
