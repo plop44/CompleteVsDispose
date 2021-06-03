@@ -20,7 +20,7 @@ namespace CompleteVsDispose.Completing
                 .GroupBy(t => t % 10)
                 .Select(t => new ChildViewModelCompleting(t.Key, t.Select(t2 => new Random().NextDouble())))
                 .ObserveOn(DispatcherScheduler.Current)
-                .Subscribe(_children.Add);
+                .Subscribe(t => _children.Add(t));
         }
 
         public IEnumerable<ChildViewModelCompleting> Children => _children;

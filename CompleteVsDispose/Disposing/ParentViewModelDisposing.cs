@@ -17,7 +17,7 @@ namespace CompleteVsDispose.Disposing
                 .GroupBy(t => t % 10)
                 .Select(t => new ChildViewModelDisposing(t.Key, t.Select(t2 => new Random().NextDouble())))
                 .ObserveOn(DispatcherScheduler.Current)
-                .Subscribe(_children.Add);
+                .Subscribe(t => _children.Add(t));
         }
 
         public IEnumerable<ChildViewModelDisposing> Children => _children;

@@ -1,32 +1,46 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows.Input;
+using CompleteVsDispose.Completing;
+using CompleteVsDispose.Disposing;
 
 namespace CompleteVsDispose
 {
     public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        private readonly ObservableCollection<object> _viewModels;
 
         public MainWindowViewModel()
         {
-            DisposeCommand = new DelegateCommand(OnDisposeCommandExecute);
+            _viewModels = new ObservableCollection<object>
+            {
+                new ParentViewModelCompleting(),
+                new ParentViewModelDisposing()
+            };
+
+            AddCompletingViewModelCommand = new DelegateCommand(() => _viewModels.Add(new ParentViewModelCompleting()));
+            AddDisposingViewModelCommand = new DelegateCommand(() => _viewModels.Add(new ParentViewModelDisposing()));
+            RemoveViewModelCommand = new DelegateCommand<object>(t =>
+            {
+                _viewModels.Remove(t);
+                (t as IDisposable)?.Dispose();
+            });
         }
 
-        private void OnDisposeCommandExecute()
-        {
-            ParentViewModelCompleting?.Dispose();
-            ParentViewModelDisposing?.Dispose();
-        }
+        public ICommand AddCompletingViewModelCommand { get; }
+        public ICommand AddDisposingViewModelCommand { get; }
 
-        public Completing.ParentViewModelCompleting ParentViewModelCompleting { get; } = new Completing.ParentViewModelCompleting();
-        public Disposing.ParentViewModelDisposing ParentViewModelDisposing { get; } = new Disposing.ParentViewModelDisposing();
-        public ICommand DisposeCommand { get; }
+        public IEnumerable<object> ViewModels => _viewModels;
+
+        public ICommand RemoveViewModelCommand { get; }
 
         public void Dispose()
         {
-            ParentViewModelCompleting?.Dispose();
-            ParentViewModelDisposing?.Dispose();
+            foreach (var viewModel in _viewModels) (viewModel as IDisposable)?.Dispose();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

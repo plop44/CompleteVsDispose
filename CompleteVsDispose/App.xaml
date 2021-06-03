@@ -2,8 +2,47 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CompleteVsDispose"
+             xmlns:disposing="clr-namespace:CompleteVsDispose.Disposing"
+             xmlns:completing="clr-namespace:CompleteVsDispose.Completing"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+      <DataTemplate DataType="{x:Type disposing:ParentViewModelDisposing}">
+        <StackPanel Orientation="Vertical" Margin="4">
+          <TextBlock Text="Disposing" FontWeight="Bold" Margin="0,10" />
+          <ItemsControl ItemsSource="{Binding Children}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="{x:Type disposing:ChildViewModelDisposing}">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}=>{1:N2}">
+                      <Binding Path="Key" />
+                      <Binding Path="Value" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </DataTemplate>
+      <DataTemplate DataType="{x:Type completing:ParentViewModelCompleting}">
+        <StackPanel Orientation="Vertical" Margin="4">
+          <TextBlock Text="Completing" FontWeight="Bold" Margin="0,10" />
+          <ItemsControl ItemsSource="{Binding Children}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="{x:Type completing:ChildViewModelCompleting}">
+                <TextBlock>
+                  <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}=>{1:N2}">
+                      <Binding Path="Key" />
+                      <Binding Path="Value" />
+                    </MultiBinding>
+                  </TextBlock.Text>
+                </TextBlock>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </DataTemplate>
     </Application.Resources>
 </Application>
