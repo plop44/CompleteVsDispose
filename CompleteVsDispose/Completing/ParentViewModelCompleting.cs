@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.CompilerServices;
 
 namespace CompleteVsDispose.Completing
 {
-    public class ParentViewModelCompleting : IDisposable
+    public class ParentViewModelCompleting : IDisposable, INotifyPropertyChanged
     {
         private readonly ObservableCollection<ChildViewModelCompleting> _children = new ObservableCollection<ChildViewModelCompleting>();
         private readonly Subject<Unit> _dispose = new Subject<Unit>();
@@ -33,5 +35,7 @@ namespace CompleteVsDispose.Completing
             _dispose.OnNext(Unit.Default);
             _dispose.Dispose();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

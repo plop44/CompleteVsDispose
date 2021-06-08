@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 
 namespace CompleteVsDispose.Disposing
 {
-    public class ParentViewModelDisposing : IDisposable
+    public class ParentViewModelDisposing : INotifyPropertyChanged, IDisposable
     {
         private readonly ObservableCollection<ChildViewModelDisposing> _children = new ObservableCollection<ChildViewModelDisposing>();
         private readonly IDisposable _subscription;
@@ -28,5 +29,7 @@ namespace CompleteVsDispose.Disposing
 
             foreach (var childViewModel in _children) childViewModel.Dispose();
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
